@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웨딩 준비 비용 플래너</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans KR & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            rose: {
+              50: '#fdf5f6',
+              100: '#fbe7ea',
+              200: '#f6cdd4',
+              300: '#eea6b3',
+              400: '#e27b8f',
+              500: '#cf566e',
+              600: '#b43e56',
+              700: '#963046',
+              800: '#7c293c',
+              900: '#672535',
+            },
+            pink: {
+              50: '#fdf5f9',
+              100: '#fbe7f1',
+              200: '#f6cee2',
+              300: '#eea6ca',
+              400: '#e279ae',
+              500: '#cf5491',
+              600: '#b33b75',
+              700: '#952e60',
+              800: '#7b2750',
+              900: '#662344',
+            },
+            purple: {
+              50: '#f9f5fd',
+              100: '#f1e8fb',
+              200: '#e2d0f6',
+              300: '#ccadee',
+              400: '#b184e2',
+              500: '#9661d1',
+              600: '#7d47b7',
+              700: '#673898',
+              800: '#552f7c',
+              900: '#462866',
+            },
+            emerald: {
+              50: '#f2fbf7',
+              100: '#e0f5ec',
+              200: '#c0ead9',
+              300: '#8fd8bc',
+              400: '#5dc09b',
+              500: '#3ba37d',
+              600: '#2b8364',
+              700: '#246851',
+              800: '#1f5342',
+              900: '#1b4437',
+            },
+            sky: {
+              50: '#f2f9fd',
+              100: '#e1f1fb',
+              200: '#c1e3f6',
+              300: '#90cbee',
+              400: '#5baee2',
+              500: '#3891cf',
+              600: '#2874af',
+              700: '#225d8e',
+              800: '#204e75',
+              900: '#1f4261',
+            },
+            amber: {
+              50: '#fdfaf1',
+              100: '#faf1d8',
+              200: '#f4e1ae',
+              300: '#eccb79',
+              400: '#e1b149',
+              500: '#cf962b',
+              600: '#b17720',
+              700: '#8e591c',
+              800: '#75471d',
+              900: '#623b1b',
+            },
+            orange: {
+              50: '#fdf7f2',
+              100: '#faece0',
+              200: '#f5d6bd',
+              300: '#edb88f',
+              400: '#e2935c',
+              500: '#d17438',
+              600: '#b45927',
+              700: '#944421',
+              800: '#783820',
+              900: '#622f1d',
+            },
+            indigo: {
+              50: '#f4f6fd',
+              100: '#e7ebfb',
+              200: '#cfd7f6',
+              300: '#acb9ee',
+              400: '#8596e3',
+              500: '#6374d4',
+              600: '#4c5bc0',
+              700: '#3e499e',
+              800: '#363f80',
+              900: '#303768',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .item-enter {
+      animation: slideFadeIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* 드래그 앤 드롭 시각 피드백 */
+    .dragging {
+      opacity: 0.45;
+      transform: scale(0.98);
+    }
+
+    .drag-over {
+      border-top: 2.5px solid #eea6b3 !important;
+    }
+
+    /* 숫자 입력 필드 기본 화살표 숨김 */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* 파스텔 커스텀 스크롤바 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f6cdd4;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #eea6b3;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-rose-50 via-purple-50 to-sky-50 text-slate-700 py-6 px-3 sm:px-6">
+
+  <main class="max-w-5xl mx-auto space-y-6">
+    
+    <!-- 상단 헤더 & 총 예산 요약 대시보드 -->
+    <section class="bg-white/85 backdrop-blur-md rounded-3xl shadow-xl shadow-rose-100/60 border border-white p-5 sm:p-7">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        <div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-100 text-rose-700 mb-2">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"/>
+            </svg>
+            WEDDING BUDGET PLANNER
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">
+            결혼 준비 비용 정리
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            카테고리, 계약금, 잔금 결제일과 결제자별 분담 내역을 한눈에 관리하세요.
+          </p>
+        </div>
+
+        <!-- 우측 상단 위젯 그룹: 결혼 날짜 D-Day 카드 & 전체 지불 진행률 카드 -->
+        <div class="flex flex-col sm:flex-row items-stretch gap-3">
+          <!-- 결혼 날짜 & D-Day 표시 카드 -->
+          <div class="bg-gradient-to-br from-rose-50/95 via-pink-50/90 to-purple-50/90 border border-rose-200/80 rounded-2xl px-4 py-3 flex items-center justify-between gap-3.5 sm:min-w-[235px]">
+            <div>
+              <label for="input-wedding-date" class="flex items-center gap-1 text-[11px] font-semibold text-rose-700 mb-1">
+                <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+                <span>결혼 예정일</span>
+              </label>
+              <input
+                type="date"
+                id="input-wedding-date"
+                aria-label="결혼 예정일 선택"
+                class="bg-white/95 hover:bg-white focus:bg-white text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-xl border border-rose-200/90 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition-all cursor-pointer"
+              />
+            </div>
+
+            <div class="text-right shrink-0 pl-2 border-l border-rose-200/70">
+              <div id="wedding-dday-badge" class="text-lg sm:text-xl font-extrabold text-rose-600 tracking-tight leading-none">
+                D-Day
+              </div>
+              <div id="wedding-dday-sub" class="text-[11px] font-medium text-rose-500/90 mt-1">
+                날짜를 선택하세요
+              </div>
+            </div>
+          </div>
+
+          <!-- 전체 지불 진행률 표시 -->
+          <div class="bg-rose-50/80 border border-rose-100 rounded-2xl px-4 py-3 sm:min-w-[185px] flex flex-col justify-center">
+            <div class="flex items-center justify-between text-xs font-medium text-rose-700 mb-1.5">
+              <span>전체 지불 진행률</span>
+              <span id="summary-percent" class="font-bold text-rose-800">0%</span>
+            </div>
+            <div class="w-full h-2 bg-rose-100 rounded-full overflow-hidden">
+              <div id="summary-progress-bar" class="h-full bg-gradient-to-r from-pink-300 via-purple-300 to-sky-300 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 목표 예산(예상 비용) 대비 사용 현황 카드 -->
+      <div id="budget-tracker-box" class="mb-4 rounded-2xl bg-sky-50/75 border border-sky-200/80 p-4 transition-all">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs sm:text-sm font-bold text-slate-700">목표 예산 대비 사용 현황</span>
+            <span id="budget-status-badge" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200/80">
+              예산 미설정
+            </span>
+          </div>
+
+          <!-- 목표 예산 입력 필드 -->
+          <div class="flex items-center gap-2">
+            <label for="input-target-budget" class="text-xs font-medium text-slate-500 shrink-0">예상 예산:</label>
+            <div class="relative flex items-center">
+              <input
+                type="text"
+                inputmode="numeric"
+                id="input-target-budget"
+                placeholder="예: 30,000,000"
+                autocomplete="off"
+                class="w-36 sm:w-44 bg-white/95 hover:bg-white focus:bg-white text-slate-800 placeholder-slate-400 text-xs sm:text-sm font-bold text-right pr-7 pl-3 py-1.5 rounded-xl border border-sky-200/90 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-100 transition-all"
+              />
+              <span class="absolute right-2.5 text-xs font-medium text-slate-400 pointer-events-none">원</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 예산 사용률 게이지 바 -->
+        <div id="budget-usage-track" class="w-full h-2.5 bg-white/90 rounded-full overflow-hidden border border-sky-100 mb-2">
+          <div
+            id="budget-usage-bar"
+            class="h-full bg-gradient-to-r from-sky-300 to-indigo-300 rounded-full transition-all duration-500"
+            style="width: 0%"
+          ></div>
+        </div>
+
+        <!-- 예산 상세 수치 안내 문구 -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
+          <span id="budget-usage-detail" class="text-slate-500 font-medium">
+            위 입력칸에 예상 예산을 입력하면 사용률과 초과 여부를 자동으로 계산해 드려요.
+          </span>
+          <span id="budget-diff-detail" class="font-bold text-sky-700"></span>
+        </div>
+      </div>
+
+      <!-- 4단 핵심 금액 요약 카드 (남은 잔금 합계 옆에 이번 달 결제 필요액 배치) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 총 등록 비용 -->
+        <div class="rounded-2xl bg-purple-50/80 border border-purple-100 p-4">
+          <div class="flex items-center justify-between text-xs font-medium text-purple-600 mb-1">
+            <span>등록된 총 비용</span>
+            <span class="w-2 h-2 rounded-full bg-purple-300"></span>
+          </div>
+          <div id="summary-total" class="text-lg sm:text-xl font-bold text-slate-800 tracking-tight">
+            0원
+          </div>
+          <div class="text-[11px] text-slate-400 mt-1">등록된 전체 항목 합계</div>
+        </div>
+
+        <!-- 지불 완료 금액 (계약금 + 지불완료된 잔금) -->
+        <div class="rounded-2xl bg-emerald-50/80 border border-emerald-100 p-4">
+          <div class="flex items-center justify-between text-xs font-medium text-emerald-600 mb-1">
+            <span>지불 완료 금액</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+          </div>
+          <div id="summary-paid" class="text-lg sm:text-xl font-bold text-emerald-800 tracking-tight">
+            0원
+          </div>
+          <div id="summary-deposit-sub" class="text-[11px] text-emerald-600/80 mt-1">계약금 합계 0원 포함</div>
+        </div>
+
+        <!-- 남은 잔금 합계 -->
+        <div class="rounded-2xl bg-rose-50/80 border border-rose-100 p-4">
+          <div class="flex items-center justify-between text-xs font-medium text-rose-600 mb-1">
+            <span>남은 잔금 합계</span>
+            <span class="w-2 h-2 rounded-full bg-rose-300"></span>
+          </div>
+          <div id="summary-balance" class="text-lg sm:text-xl font-bold text-rose-700 tracking-tight">
+            0원
+          </div>
+          <div class="text-[11px] text-rose-500/80 mt-1">잔금 미지불 항목 기준</div>
+        </div>
+
+        <!-- 월별 결제 필요액 (◀ 이번달 결제 필요액 ▶ 형식) -->
+        <div class="rounded-2xl bg-amber-50/85 border border-amber-200/80 p-4">
+          <div class="flex items-center justify-between text-xs font-medium text-amber-700 mb-1">
+            <div class="flex items-center gap-1 min-w-0">
+              <button
+                type="button"
+                id="prev-month-due-btn"
+                title="이전 달 결제 필요액으로 넘기기"
+                class="w-5 h-5 rounded-full bg-amber-200/80 hover:bg-amber-300 text-amber-900 flex items-center justify-center text-[10px] font-bold shrink-0 transition-colors"
+              >
+                ◀
+              </button>
+              <span id="summary-month-due-label" class="truncate font-semibold px-1">이번달 결제 필요액</span>
+              <button
+                type="button"
+                id="next-month-due-btn"
+                title="다음 달 결제 필요액으로 넘기기"
+                class="w-5 h-5 rounded-full bg-amber-200/80 hover:bg-amber-300 text-amber-900 flex items-center justify-center text-[10px] font-bold shrink-0 transition-colors"
+              >
+                ▶
+              </button>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-amber-300 shrink-0"></span>
+          </div>
+          <div id="summary-month-due" class="text-lg sm:text-xl font-bold text-amber-800 tracking-tight">
+            0원
+          </div>
+          <div id="summary-month-due-sub" class="text-[11px] text-amber-600/85 mt-1">잔금 예정 0건</div>
+        </div>
+      </div>
+
+      <!-- 결제자별 분담 현황 요약 바 -->
+      <div id="payer-summary-bar" class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-slate-400 font-medium mr-1">결제자별 총액:</span>
+        <!-- JS로 결제자별 배지 렌더링 -->
+      </div>
+    </section>
+
+    <!-- 비용 항목 입력 / 수정 폼 -->
+    <section class="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg shadow-rose-100/50 border border-white p-5 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <h2 id="form-title" class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-300"></span>
+          새 비용 항목 추가
+        </h2>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            id="toggle-category-manager-btn"
+            class="text-xs font-medium text-purple-600 hover:text-purple-700 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100/80 border border-purple-200/80 transition-colors flex items-center gap-1"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+            </svg>
+            <span>카테고리 관리</span>
+          </button>
+          <button
+            type="button"
+            id="cancel-edit-btn"
+            class="hidden text-xs font-medium text-slate-400 hover:text-slate-600 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors"
+          >
+            수정 취소
+          </button>
+        </div>
+      </div>
+
+      <!-- 카테고리 추가 / 삭제 관리 패널 -->
+      <div id="category-manager-panel" class="hidden mb-5 p-4 rounded-2xl bg-purple-50/70 border border-purple-100 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-purple-800">카테고리 목록 편집 (추가 및 삭제)</span>
+          <button type="button" id="close-category-manager-btn" class="text-xs text-slate-400 hover:text-slate-600">
+            닫기
+          </button>
+        </div>
+        <div id="category-chip-list" class="flex flex-wrap gap-1.5">
+          <!-- JS로 카테고리 칩 렌더링 -->
+        </div>
+        <div class="flex gap-2 pt-1">
+          <input
+            type="text"
+            id="new-category-input"
+            placeholder="새 카테고리 이름 (예: 예물/예단, 가전/가구)"
+            maxlength="20"
+            autocomplete="off"
+            class="flex-1 bg-white text-slate-700 placeholder-slate-400 text-xs sm:text-sm px-3.5 py-2 rounded-xl border border-purple-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-100 transition-all"
+          />
+          <button
+            type="button"
+            id="add-category-btn"
+            class="px-4 py-2 rounded-xl bg-purple-200 hover:bg-purple-300 text-purple-900 font-semibold text-xs sm:text-sm transition-colors shrink-0"
+          >
+            추가
+          </button>
+        </div>
+      </div>
+
+      <form id="expense-form" class="space-y-4">
+        <!-- 1행: 날짜(계약일), 카테고리(항목 입력 전 선택), 항목명 -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <!-- 날짜 -->
+          <div class="sm:col-span-3">
+            <label for="input-date" class="block text-xs font-medium text-slate-500 mb-1.5">날짜 (계약일)</label>
+            <input
+              type="date"
+              id="input-date"
+              required
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+
+          <!-- 카테고리 -->
+          <div class="sm:col-span-4">
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="input-category" class="block text-xs font-medium text-slate-500">카테고리</label>
+              <button
+                type="button"
+                id="quick-manage-cat-btn"
+                class="text-[11px] font-medium text-purple-600 hover:text-purple-700 transition-colors"
+              >
+                + 추가/삭제
+              </button>
+            </div>
+            <select
+              id="input-category"
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            >
+              <!-- JS로 카테고리 옵션 렌더링 -->
+            </select>
+          </div>
+
+          <!-- 항목명 -->
+          <div class="sm:col-span-5">
+            <label for="input-title" class="block text-xs font-medium text-slate-500 mb-1.5">항목</label>
+            <input
+              type="text"
+              id="input-title"
+              placeholder="예: 본식 스냅 촬영, 대관료 계약"
+              maxlength="80"
+              required
+              autocomplete="off"
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 placeholder-slate-400 text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- 2행: 결제자, 총 금액, 계약금, 잔금 결제일 -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <!-- 결제자 -->
+          <div class="sm:col-span-3">
+            <label for="input-payer" class="block text-xs font-medium text-slate-500 mb-1.5">결제자</label>
+            <select
+              id="input-payer"
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            >
+              <option value="공동">공동</option>
+              <option value="신랑">신랑</option>
+              <option value="신부">신부</option>
+              <option value="양가 지원">양가 지원</option>
+            </select>
+          </div>
+
+          <!-- 총 금액 -->
+          <div class="sm:col-span-3">
+            <label for="input-amount" class="block text-xs font-medium text-slate-500 mb-1.5">총 금액 (원)</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              id="input-amount"
+              placeholder="0"
+              required
+              autocomplete="off"
+              class="currency-input w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 placeholder-slate-400 text-sm font-medium text-right px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+
+          <!-- 계약금 -->
+          <div class="sm:col-span-3">
+            <label for="input-deposit" class="block text-xs font-medium text-slate-500 mb-1.5">계약금 (원)</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              id="input-deposit"
+              placeholder="0"
+              autocomplete="off"
+              class="currency-input w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 placeholder-slate-400 text-sm font-medium text-right px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+
+          <!-- 잔금 결제일 -->
+          <div class="sm:col-span-3">
+            <label for="input-balance-date" class="block text-xs font-medium text-slate-500 mb-1.5">잔금 결제일</label>
+            <input
+              type="date"
+              id="input-balance-date"
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- 3행: 메모(선택), 잔금 지불 여부 체크박스 & 등록 버튼 -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+          <!-- 메모 입력 -->
+          <div class="sm:col-span-5">
+            <input
+              type="text"
+              id="input-memo"
+              placeholder="메모 (선택: 계약 조건, 계좌, 연락처 등)"
+              maxlength="150"
+              autocomplete="off"
+              class="w-full bg-slate-50/90 hover:bg-white focus:bg-white text-slate-700 placeholder-slate-400 text-xs sm:text-sm px-3.5 py-2.5 rounded-2xl border border-slate-200/80 focus:border-rose-300 focus:outline-none focus:ring-4 focus:ring-rose-100 transition-all"
+            />
+          </div>
+
+          <!-- 잔금 지불 여부 체크박스 -->
+          <div class="sm:col-span-3">
+            <label
+              for="input-balance-paid"
+              class="flex items-center justify-between w-full bg-emerald-50/60 hover:bg-emerald-50 border border-emerald-200/70 px-3.5 py-2.5 rounded-2xl cursor-pointer select-none transition-colors"
+            >
+              <span class="text-xs sm:text-sm font-medium text-slate-700">잔금 지불 완료</span>
+              <input
+                type="checkbox"
+                id="input-balance-paid"
+                class="w-4 h-4 accent-emerald-400 rounded cursor-pointer"
+              />
+            </label>
+          </div>
+
+          <!-- 제출 버튼 -->
+          <div class="sm:col-span-4">
+            <button
+              type="submit"
+              id="submit-btn"
+              class="w-full py-2.5 px-4 rounded-2xl bg-rose-200 hover:bg-rose-300 active:scale-[0.98] text-rose-900 font-semibold text-sm shadow-sm shadow-rose-100 transition-all flex items-center justify-center gap-1.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              <span id="submit-btn-text">항목 추가</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- 비용 목록 섹션 -->
+    <section class="bg-white/85 backdrop-blur-md rounded-3xl shadow-xl shadow-rose-100/50 border border-white p-5 sm:p-7">
+      
+      <!-- 필터 & 선택 컨트롤 -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+        <!-- 잔금 상태 필터 탭 -->
+        <div class="inline-flex p-1 bg-slate-100/80 rounded-2xl self-start" role="tablist">
+          <button type="button" data-status-filter="all" class="status-filter-btn px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white text-slate-800 shadow-sm transition-all">
+            전체
+          </button>
+          <button type="button" data-status-filter="unpaid" class="status-filter-btn px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-700 transition-all">
+            잔금 미지불
+          </button>
+          <button type="button" data-status-filter="paid" class="status-filter-btn px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-700 transition-all">
+            지불 완료
+          </button>
+        </div>
+
+        <!-- 카테고리, 결제자 필터 및 합계 선택 버튼 -->
+        <div class="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <select
+            id="category-filter-select"
+            aria-label="카테고리별 필터"
+            class="bg-slate-100/80 hover:bg-slate-100 text-slate-600 text-xs sm:text-sm font-medium px-3 py-1.5 rounded-xl border border-transparent focus:border-rose-300 focus:outline-none transition-all"
+          >
+            <option value="all">모든 카테고리</option>
+          </select>
+
+          <select
+            id="payer-filter-select"
+            aria-label="결제자별 필터"
+            class="bg-slate-100/80 hover:bg-slate-100 text-slate-600 text-xs sm:text-sm font-medium px-3 py-1.5 rounded-xl border border-transparent focus:border-rose-300 focus:outline-none transition-all"
+          >
+            <option value="all">모든 결제자</option>
+            <option value="공동">결제자: 공동</option>
+            <option value="신랑">결제자: 신랑</option>
+            <option value="신부">결제자: 신부</option>
+            <option value="양가 지원">결제자: 양가 지원</option>
+          </select>
+
+          <button
+            type="button"
+            id="toggle-select-all-btn"
+            class="text-xs font-medium text-purple-600 hover:text-purple-700 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100/80 border border-purple-200/80 transition-colors"
+          >
+            전체 선택
+          </button>
+        </div>
+      </div>
+
+      <!-- 항목 리스트 컨테이너 -->
+      <ul id="expense-list" class="space-y-3" aria-live="polite">
+        <!-- JavaScript로 항목 카드가 렌더링됩니다 -->
+      </ul>
+
+      <!-- 빈 목록 상태 화면 -->
+      <div id="empty-state" class="hidden py-14 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-3xl bg-rose-50 flex items-center justify-center text-rose-300">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+          </svg>
+        </div>
+        <p id="empty-title" class="text-sm font-semibold text-slate-600">등록된 결혼 준비 비용 항목이 없어요</p>
+        <p id="empty-subtitle" class="text-xs text-slate-400 mt-1">위 입력창에서 웨딩홀, 스드메, 신혼여행 등 첫 항목을 추가해 보세요!</p>
+      </div>
+
+      <!-- 여러 항목들의 총 금액 합계 요약 (목록 최하단) -->
+      <div id="list-total-footer" class="hidden mt-6 pt-5 border-t border-rose-100 space-y-3">
+        <!-- JavaScript로 선택 항목 합계 및 현재 목록 합계가 렌더링됩니다 -->
+      </div>
+    </section>
+
+    <!-- 하단 제작자 표시 -->
+    <footer class="text-center text-xs text-slate-400/90 pt-1 pb-4 font-medium tracking-wide">
+      made by 프세
+    </footer>
+  </main>
+
+  <!-- 커스텀 토스트 알림창 (alert/confirm 대체 및 실행 취소 지원) -->
+  <div
+    id="toast"
+    role="status"
+    class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-800/95 text-white text-xs sm:text-sm shadow-lg opacity-0 pointer-events-none translate-y-3 transition-all duration-300"
+  >
+    <span id="toast-message">알림 메시지</span>
+    <button
+      type="button"
+      id="toast-undo-btn"
+      class="hidden text-rose-300 hover:text-rose-200 font-semibold underline underline-offset-2"
+    >
+      실행 취소
+    </button>
+  </div>
+
+  <script>
+    /**
+     * 결혼 준비 비용 플래너 애플리케이션
+     * - 상단 결혼 예정일 입력 및 실시간 D-Day 카운트다운 표시 (LocalStorage 자동 저장)
+     * - 날짜(계약일), 카테고리(추가/삭제 지원: 웨딩홀, 스튜디오/스냅, 드레스/메이크업, 혼주, 신혼여행), 항목, 메모, 총 금액, 계약금, 잔금(자동 계산), 잔금 결제일, 잔금 지불 여부, 결재자 관리
+     * - 목표 예산 대비 사용 현황 및 초과 비율(%) 실시간 표시
+     * - 잔금 결제일 기반 이번 달 결제 필요액 자동 합산
+     * - 여러 항목들의 총 금액 합계 계산, 클릭 가능한 카테고리별 소계 및 도넛형 원형 차트(금액 비율) 시각화
+     * - 항목 추가/수정, 인라인 메모 추가/편집, 잔금 지불 여부 토글, 순서 이동(드래그 앤 드롭 & 위/아래 버튼), 개별 삭제 및 실행 취소
+     */
+    (function () {
+      const STORAGE_KEY = 'wedding_budget_items_v1';
+      const CATEGORY_STORAGE_KEY = 'wedding_budget_categories_v1';
+      const BUDGET_STORAGE_KEY = 'wedding_budget_target_v1';
+      const WEDDING_DATE_STORAGE_KEY = 'wedding_budget_date_v1';
+
+      // 기본 카테고리 목록 ('인사' 제외, '신혼여행' 포함)
+      const DEFAULT_CATEGORIES = [
+        '웨딩홀',
+        '스튜디오/스냅',
+        '드레스/메이크업',
+        '혼주',
+        '신혼여행',
+      ];
+
+      // 카테고리별 순환 파스텔 배지 스타일
+      const CATEGORY_BADGE_PALETTE = [
+        'bg-rose-100 text-rose-700 border-rose-200/80',
+        'bg-purple-100 text-purple-700 border-purple-200/80',
+        'bg-emerald-100 text-emerald-700 border-emerald-200/80',
+        'bg-sky-100 text-sky-700 border-sky-200/80',
+        'bg-amber-100 text-amber-700 border-amber-200/80',
+        'bg-orange-100 text-orange-700 border-orange-200/80',
+        'bg-indigo-100 text-indigo-700 border-indigo-200/80',
+      ];
+
+      // 원형 차트용 파스텔 컬러 팔레트
+      const CHART_COLOR_PALETTE = [
+        '#eea6b3', // rose-300
+        '#ccadee', // purple-300
+        '#8fd8bc', // emerald-300
+        '#90cbee', // sky-300
+        '#eccb79', // amber-300
+        '#edb88f', // orange-300
+        '#acb9ee', // indigo-300
+      ];
+
+      // 결재자별 파스텔 배지 스타일
+      const PAYER_BADGE_STYLES = {
+        '공동': 'bg-purple-50 text-purple-700 border-purple-200/80',
+        '신랑': 'bg-sky-50 text-sky-700 border-sky-200/80',
+        '신부': 'bg-rose-50 text-rose-700 border-rose-200/80',
+        '양가 지원': 'bg-amber-50 text-amber-700 border-amber-200/80',
+      };
+
+      // 애플리케이션 상태
+      let categories = [];
+      let expenses = [];
+      let targetBudget = 0;
+      let weddingDate = '';
+      let monthOffset = 0; // 0: 이번 달, 1: 다음 달, 2: 다다음 달 ... 계속 넘기기 가능
+      let statusFilter = 'all'; // 'all' | 'unpaid' | 'paid'
+      let categoryFilter = 'all';
+      let payerFilter = 'all';
+      let selectedIds = new Set();
+      let editingId = null;
+      let inlineMemoEditId = null;
+      let draggedId = null;
+      let lastDeletedBackup = null;
+      let toastTimer = null;
+
+      // DOM 요소 참조
+      const inputWeddingDate = document.getElementById('input-wedding-date');
+      const weddingDdayBadge = document.getElementById('wedding-dday-badge');
+      const weddingDdaySub = document.getElementById('wedding-dday-sub');
+
+      const summaryPercentEl = document.getElementById('summary-percent');
+      const summaryProgressBarEl = document.getElementById('summary-progress-bar');
+      const budgetTrackerBox = document.getElementById('budget-tracker-box');
+      const budgetStatusBadge = document.getElementById('budget-status-badge');
+      const inputTargetBudget = document.getElementById('input-target-budget');
+      const budgetUsageTrack = document.getElementById('budget-usage-track');
+      const budgetUsageBar = document.getElementById('budget-usage-bar');
+      const budgetUsageDetail = document.getElementById('budget-usage-detail');
+      const budgetDiffDetail = document.getElementById('budget-diff-detail');
+
+      const summaryTotalEl = document.getElementById('summary-total');
+      const summaryPaidEl = document.getElementById('summary-paid');
+      const summaryDepositSubEl = document.getElementById('summary-deposit-sub');
+      const summaryBalanceEl = document.getElementById('summary-balance');
+      const summaryMonthDueLabelEl = document.getElementById('summary-month-due-label');
+      const prevMonthDueBtn = document.getElementById('prev-month-due-btn');
+      const nextMonthDueBtn = document.getElementById('next-month-due-btn');
+      const summaryMonthDueEl = document.getElementById('summary-month-due');
+      const summaryMonthDueSubEl = document.getElementById('summary-month-due-sub');
+      const payerSummaryBar = document.getElementById('payer-summary-bar');
+
+      const formTitleEl = document.getElementById('form-title');
+      const toggleCategoryManagerBtn = document.getElementById('toggle-category-manager-btn');
+      const cancelEditBtn = document.getElementById('cancel-edit-btn');
+      const categoryManagerPanel = document.getElementById('category-manager-panel');
+      const closeCategoryManagerBtn = document.getElementById('close-category-manager-btn');
+      const categoryChipList = document.getElementById('category-chip-list');
+      const newCategoryInput = document.getElementById('new-category-input');
+      const addCategoryBtn = document.getElementById('add-category-btn');
+
+      const expenseForm = document.getElementById('expense-form');
+      const inputDate = document.getElementById('input-date');
+      const inputCategory = document.getElementById('input-category');
+      const quickManageCatBtn = document.getElementById('quick-manage-cat-btn');
+      const inputTitle = document.getElementById('input-title');
+      const inputPayer = document.getElementById('input-payer');
+      const inputAmount = document.getElementById('input-amount');
+      const inputDeposit = document.getElementById('input-deposit');
+      const inputBalanceDate = document.getElementById('input-balance-date');
+      const inputMemo = document.getElementById('input-memo');
+      const inputBalancePaid = document.getElementById('input-balance-paid');
+      const submitBtnTextEl = document.getElementById('submit-btn-text');
+
+      const statusFilterBtns = document.querySelectorAll('.status-filter-btn');
+      const categoryFilterSelect = document.getElementById('category-filter-select');
+      const payerFilterSelect = document.getElementById('payer-filter-select');
+      const toggleSelectAllBtn = document.getElementById('toggle-select-all-btn');
+      const expenseListEl = document.getElementById('expense-list');
+      const emptyStateEl = document.getElementById('empty-state');
+      const emptyTitleEl = document.getElementById('empty-title');
+      const emptySubtitleEl = document.getElementById('empty-subtitle');
+      const listTotalFooter = document.getElementById('list-total-footer');
+
+      const toastEl = document.getElementById('toast');
+      const toastMessageEl = document.getElementById('toast-message');
+      const toastUndoBtn = document.getElementById('toast-undo-btn');
+
+      /**
+       * 유틸리티 함수 모음
+       */
+      function generateId() {
+        return 'exp_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 7);
+      }
+
+      function getTodayString() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+
+      function getCurrentYearMonth() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        return `${y}-${m}`;
+      }
+
+      function formatCurrency(value) {
+        const num = Math.round(Number(value) || 0);
+        return `${num.toLocaleString('ko-KR')}원`;
+      }
+
+      function parseCurrencyInput(str) {
+        const digits = String(str || '').replace(/[^\d]/g, '');
+        return digits ? parseInt(digits, 10) : 0;
+      }
+
+      function formatDateDisplay(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        return `${parts[0]}.${parts[1]}.${parts[2]}`;
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function getCategoryBadgeClass(cat) {
+        const idx = categories.indexOf(cat);
+        const safeIdx = idx >= 0 ? idx : Math.abs(String(cat).length);
+        return CATEGORY_BADGE_PALETTE[safeIdx % CATEGORY_BADGE_PALETTE.length];
+      }
+
+      function getChartColor(index) {
+        return CHART_COLOR_PALETTE[index % CHART_COLOR_PALETTE.length];
+      }
+
+      /**
+       * 결혼 예정일 로드/저장 및 D-Day 계산 업데이트
+       */
+      function loadWeddingDate() {
+        try {
+          const saved = localStorage.getItem(WEDDING_DATE_STORAGE_KEY) || '';
+          weddingDate = saved;
+          inputWeddingDate.value = weddingDate;
+          updateWeddingDdayDisplay();
+        } catch (err) {
+          console.error('결혼 날짜 불러오기 오류:', err);
+          weddingDate = '';
+        }
+      }
+
+      function saveWeddingDate() {
+        try {
+          localStorage.setItem(WEDDING_DATE_STORAGE_KEY, weddingDate);
+        } catch (err) {
+          console.error('결혼 날짜 저장 오류:', err);
+        }
+      }
+
+      function updateWeddingDdayDisplay() {
+        if (!weddingDate) {
+          weddingDdayBadge.textContent = 'D-Day';
+          weddingDdayBadge.className = 'text-lg sm:text-xl font-extrabold text-rose-400 tracking-tight leading-none';
+          weddingDdaySub.textContent = '날짜를 선택하세요';
+          return;
+        }
+
+        const parts = weddingDate.split('-').map(Number);
+        if (parts.length !== 3 || parts.some(isNaN)) {
+          weddingDdayBadge.textContent = 'D-Day';
+          weddingDdaySub.textContent = '날짜를 선택하세요';
+          return;
+        }
+
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const targetStart = new Date(parts[0], parts[1] - 1, parts[2]);
+        const diffDays = Math.round((targetStart - todayStart) / (1000 * 60 * 60 * 24));
+
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayOfWeek = weekdays[targetStart.getDay()];
+
+        if (diffDays > 0) {
+          weddingDdayBadge.textContent = `D-${diffDays}`;
+          weddingDdayBadge.className = 'text-lg sm:text-xl font-extrabold text-rose-600 tracking-tight leading-none';
+          weddingDdaySub.textContent = `예식일까지 ${diffDays}일 남음 (${dayOfWeek})`;
+        } else if (diffDays === 0) {
+          weddingDdayBadge.textContent = 'D-DAY!';
+          weddingDdayBadge.className = 'text-lg sm:text-xl font-extrabold text-pink-600 tracking-tight leading-none animate-pulse';
+          weddingDdaySub.textContent = '결혼을 진심으로 축하해요!';
+        } else {
+          const passedDays = Math.abs(diffDays);
+          weddingDdayBadge.textContent = `D+${passedDays}`;
+          weddingDdayBadge.className = 'text-lg sm:text-xl font-extrabold text-purple-600 tracking-tight leading-none';
+          weddingDdaySub.textContent = `결혼한 지 ${passedDays}일째`;
+        }
+      }
+
+      /**
+       * 로컬 스토리지 로드 및 저장
+       */
+      function loadCategories() {
+        try {
+          const raw = localStorage.getItem(CATEGORY_STORAGE_KEY);
+          if (!raw) {
+            categories = [...DEFAULT_CATEGORIES];
+            saveCategories();
+            return;
+          }
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            let normalized = parsed
+              .map((c) => String(c || '').trim())
+              .filter(Boolean);
+            if (normalized.includes('인사')) {
+              normalized = normalized.filter((c) => c !== '인사');
+              if (!normalized.includes('신혼여행')) {
+                normalized.push('신혼여행');
+              }
+            }
+            categories = normalized.length > 0 ? normalized : [...DEFAULT_CATEGORIES];
+            saveCategories();
+          } else {
+            categories = [...DEFAULT_CATEGORIES];
+            saveCategories();
+          }
+        } catch (err) {
+          console.error('카테고리 불러오기 오류:', err);
+          categories = [...DEFAULT_CATEGORIES];
+        }
+      }
+
+      function saveCategories() {
+        try {
+          localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(categories));
+        } catch (err) {
+          console.error('카테고리 저장 오류:', err);
+        }
+      }
+
+      function loadExpenses() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            expenses = [];
+            return;
+          }
+          const parsed = JSON.parse(raw);
+          expenses = Array.isArray(parsed) ? parsed : [];
+        } catch (err) {
+          console.error('비용 목록 불러오기 오류:', err);
+          expenses = [];
+        }
+      }
+
+      function saveExpenses() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+        } catch (err) {
+          console.error('비용 목록 저장 오류:', err);
+        }
+      }
+
+      function loadTargetBudget() {
+        try {
+          const raw = localStorage.getItem(BUDGET_STORAGE_KEY);
+          const parsed = raw ? parseInt(raw, 10) : 0;
+          targetBudget = Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+          inputTargetBudget.value = targetBudget > 0 ? targetBudget.toLocaleString('ko-KR') : '';
+        } catch (err) {
+          console.error('목표 예산 불러오기 오류:', err);
+          targetBudget = 0;
+        }
+      }
+
+      function saveTargetBudget() {
+        try {
+          localStorage.setItem(BUDGET_STORAGE_KEY, String(targetBudget));
+        } catch (err) {
+          console.error('목표 예산 저장 오류:', err);
+        }
+      }
+
+      /**
+       * 하단 토스트 알림
+       */
+      function showToast(message, enableUndo = false) {
+        clearTimeout(toastTimer);
+        toastMessageEl.textContent = message;
+
+        if (enableUndo && lastDeletedBackup) {
+          toastUndoBtn.classList.remove('hidden');
+        } else {
+          toastUndoBtn.classList.add('hidden');
+        }
+
+        toastEl.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+        toastEl.classList.add('opacity-100', 'translate-y-0');
+
+        toastTimer = setTimeout(() => {
+          hideToast();
+        }, 3600);
+      }
+
+      function hideToast() {
+        toastEl.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+      }
+
+      function undoDelete() {
+        if (!lastDeletedBackup) return;
+        expenses = [...lastDeletedBackup];
+        lastDeletedBackup = null;
+        saveExpenses();
+        render();
+        hideToast();
+      }
+
+      /**
+       * 카테고리 UI 렌더링 및 추가/삭제
+       */
+      function renderCategoryControls() {
+        const prevInputCat = inputCategory.value;
+        inputCategory.innerHTML = '';
+        categories.forEach((cat) => {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = cat;
+          inputCategory.appendChild(opt);
+        });
+        if (categories.includes(prevInputCat)) {
+          inputCategory.value = prevInputCat;
+        }
+
+        categoryFilterSelect.innerHTML = '<option value="all">모든 카테고리</option>';
+        categories.forEach((cat) => {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = cat;
+          categoryFilterSelect.appendChild(opt);
+        });
+        if (categoryFilter !== 'all' && !categories.includes(categoryFilter)) {
+          categoryFilter = 'all';
+        }
+        categoryFilterSelect.value = categoryFilter;
+
+        categoryChipList.innerHTML = '';
+        categories.forEach((cat) => {
+          const chip = document.createElement('span');
+          chip.className = `inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border ${getCategoryBadgeClass(cat)}`;
+          chip.innerHTML = `<span>${escapeHtml(cat)}</span>`;
+
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.title = `${cat} 삭제`;
+          removeBtn.className = 'w-4 h-4 rounded-full hover:bg-black/10 flex items-center justify-center text-current transition-colors';
+          removeBtn.innerHTML = '&times;';
+          removeBtn.addEventListener('click', () => deleteCategory(cat));
+
+          chip.appendChild(removeBtn);
+          categoryChipList.appendChild(chip);
+        });
+      }
+
+      function addCategory() {
+        const name = newCategoryInput.value.trim();
+        if (!name) {
+          showToast('추가할 카테고리 이름을 입력해 주세요.');
+          newCategoryInput.focus();
+          return;
+        }
+        if (categories.includes(name)) {
+          showToast('이미 존재하는 카테고리입니다.');
+          newCategoryInput.focus();
+          return;
+        }
+
+        categories.push(name);
+        saveCategories();
+        newCategoryInput.value = '';
+        renderCategoryControls();
+        inputCategory.value = name;
+        render();
+        showToast(`'${name}' 카테고리가 추가되었습니다.`);
+      }
+
+      function deleteCategory(catName) {
+        if (categories.length <= 1) {
+          showToast('최소 1개의 카테고리는 유지되어야 합니다.');
+          return;
+        }
+        categories = categories.filter((c) => c !== catName);
+        if (categoryFilter === catName) {
+          categoryFilter = 'all';
+        }
+        saveCategories();
+        renderCategoryControls();
+        render();
+        showToast(`'${catName}' 카테고리가 삭제되었습니다.`);
+      }
+
+      /**
+       * 입력 폼 초기화 및 제출 처리
+       */
+      function resetForm() {
+        editingId = null;
+        formTitleEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-rose-300"></span>새 비용 항목 추가`;
+        submitBtnTextEl.textContent = '항목 추가';
+        cancelEditBtn.classList.add('hidden');
+
+        expenseForm.reset();
+        inputDate.value = getTodayString();
+        if (categories.length > 0) {
+          inputCategory.value = categories[0];
+        }
+      }
+
+      function handleFormSubmit(e) {
+        e.preventDefault();
+
+        const date = inputDate.value || getTodayString();
+        const category = inputCategory.value || categories[0] || '기타';
+        const title = inputTitle.value.trim();
+        const payer = inputPayer.value || '공동';
+        const amount = parseCurrencyInput(inputAmount.value);
+        const deposit = parseCurrencyInput(inputDeposit.value);
+        const balanceDate = inputBalanceDate.value || '';
+        const balancePaid = inputBalancePaid.checked;
+        const memo = inputMemo.value.trim();
+
+        if (!title) {
+          showToast('항목명을 입력해 주세요.');
+          inputTitle.focus();
+          return;
+        }
+
+        if (deposit > amount) {
+          showToast('계약금이 총 금액보다 클 수 없습니다.');
+          inputDeposit.focus();
+          return;
+        }
+
+        if (editingId) {
+          const target = expenses.find((item) => item.id === editingId);
+          if (target) {
+            target.date = date;
+            target.category = category;
+            target.title = title;
+            target.payer = payer;
+            target.amount = amount;
+            target.deposit = deposit;
+            target.balanceDate = balanceDate;
+            target.balancePaid = balancePaid;
+            target.memo = memo;
+          }
+          saveExpenses();
+          resetForm();
+          render();
+          showToast('비용 항목이 수정되었습니다.');
+        } else {
+          const newItem = {
+            id: generateId(),
+            date,
+            category,
+            title,
+            payer,
+            amount,
+            deposit,
+            balanceDate,
+            balancePaid,
+            memo,
+          };
+          expenses.unshift(newItem);
+          saveExpenses();
+          resetForm();
+          render();
+          showToast('새 비용 항목이 추가되었습니다.');
+        }
+      }
+
+      /**
+       * 등록된 항목 카드 아래에서 메모를 바로 저장/수정
+       */
+      function saveInlineMemo(id, rawMemo) {
+        const target = expenses.find((item) => item.id === id);
+        inlineMemoEditId = null;
+        if (!target) {
+          render();
+          return;
+        }
+
+        const trimmed = String(rawMemo || '').trim();
+        target.memo = trimmed;
+        saveExpenses();
+        render();
+        showToast(trimmed ? '메모가 저장되었습니다.' : '메모가 삭제되었습니다.');
+      }
+
+      /**
+       * 수정 모드 시작
+       */
+      function startEditExpense(id) {
+        const target = expenses.find((item) => item.id === id);
+        if (!target) return;
+
+        editingId = id;
+        inlineMemoEditId = null;
+        formTitleEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>비용 항목 수정`;
+        submitBtnTextEl.textContent = '수정 내용 저장';
+        cancelEditBtn.classList.remove('hidden');
+
+        inputDate.value = target.date || getTodayString();
+        if (categories.includes(target.category)) {
+          inputCategory.value = target.category;
+        }
+        inputTitle.value = target.title;
+        inputPayer.value = target.payer || '공동';
+        inputAmount.value = target.amount ? Number(target.amount).toLocaleString('ko-KR') : '';
+        inputDeposit.value = target.deposit ? Number(target.deposit).toLocaleString('ko-KR') : '';
+        inputBalanceDate.value = target.balanceDate || '';
+        inputBalancePaid.checked = Boolean(target.balancePaid);
+        inputMemo.value = target.memo || '';
+
+        expenseForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        inputTitle.focus();
+      }
+
+      /**
+       * 잔금 지불 여부 토글
+       */
+      function toggleBalancePaid(id) {
+        const target = expenses.find((item) => item.id === id);
+        if (!target) return;
+
+        target.balancePaid = !target.balancePaid;
+        saveExpenses();
+        render();
+      }
+
+      /**
+       * 개별 항목 삭제 (실행 취소 백업 보관)
+       */
+      function deleteExpense(id) {
+        const index = expenses.findIndex((item) => item.id === id);
+        if (index === -1) return;
+
+        lastDeletedBackup = [...expenses];
+        expenses.splice(index, 1);
+        selectedIds.delete(id);
+        if (editingId === id) {
+          resetForm();
+        }
+        if (inlineMemoEditId === id) {
+          inlineMemoEditId = null;
+        }
+        saveExpenses();
+        render();
+        showToast('비용 항목이 삭제되었습니다.', true);
+      }
+
+      /**
+       * 항목 순서 이동 (현재 필터링된 목록 기준 위/아래)
+       */
+      function moveExpense(id, direction) {
+        const filtered = getFilteredExpenses();
+        const visibleIdx = filtered.findIndex((item) => item.id === id);
+        if (visibleIdx === -1) return;
+
+        const targetVisibleIdx = direction === 'up' ? visibleIdx - 1 : visibleIdx + 1;
+        if (targetVisibleIdx < 0 || targetVisibleIdx >= filtered.length) return;
+
+        const targetId = filtered[targetVisibleIdx].id;
+        const fromIdx = expenses.findIndex((item) => item.id === id);
+        const toIdx = expenses.findIndex((item) => item.id === targetId);
+        if (fromIdx === -1 || toIdx === -1) return;
+
+        const [moved] = expenses.splice(fromIdx, 1);
+        expenses.splice(toIdx, 0, moved);
+        saveExpenses();
+        render();
+      }
+
+      /**
+       * 드래그 앤 드롭 위치 재배치
+       */
+      function reorderByDrop(sourceId, targetId) {
+        if (!sourceId || !targetId || sourceId === targetId) return;
+        const fromIdx = expenses.findIndex((item) => item.id === sourceId);
+        const toIdx = expenses.findIndex((item) => item.id === targetId);
+        if (fromIdx === -1 || toIdx === -1) return;
+
+        const [moved] = expenses.splice(fromIdx, 1);
+        expenses.splice(toIdx, 0, moved);
+        saveExpenses();
+        render();
+      }
+
+      /**
+       * 다중 선택 토글
+       */
+      function toggleSelectExpense(id) {
+        if (selectedIds.has(id)) {
+          selectedIds.delete(id);
+        } else {
+          selectedIds.add(id);
+        }
+        render();
+      }
+
+      function toggleSelectAllVisible() {
+        const filtered = getFilteredExpenses();
+        if (filtered.length === 0) return;
+
+        const allVisibleSelected = filtered.every((item) => selectedIds.has(item.id));
+        if (allVisibleSelected) {
+          filtered.forEach((item) => selectedIds.delete(item.id));
+        } else {
+          filtered.forEach((item) => selectedIds.add(item.id));
+        }
+        render();
+      }
+
+      /**
+       * 현재 필터에 따른 항목 목록 반환
+       */
+      function getFilteredExpenses() {
+        return expenses.filter((item) => {
+          if (statusFilter === 'unpaid' && item.balancePaid) return false;
+          if (statusFilter === 'paid' && !item.balancePaid) return false;
+          if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
+          if (payerFilter !== 'all' && item.payer !== payerFilter) return false;
+          return true;
+        });
+      }
+
+      /**
+       * 상단 대시보드 요약 & 목표 예산 대비 사용 현황 업데이트
+       */
+      function updateSummary() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1; // 1 ~ 12
+
+        // monthOffset만큼 월을 더해줌 (0: 이번 달, 1: 다음 달, 2: 다다음 달 ...)
+        let targetTotalMonths = (currentYear * 12) + (currentMonth - 1) + monthOffset;
+        let targetYear = Math.floor(targetTotalMonths / 12);
+        let targetMonth = (targetTotalMonths % 12) + 1;
+
+        const targetYM = `${targetYear}-${String(targetMonth).padStart(2, '0')}`;
+
+        let totalAmount = 0;
+        let totalDeposit = 0;
+        let paidAmount = 0;
+        let remainingBalance = 0;
+        let monthDueAmount = 0;
+        let monthDueCount = 0;
+
+        const payerTotals = {
+          '공동': 0,
+          '신랑': 0,
+          '신부': 0,
+          '양가 지원': 0,
+        };
+
+        expenses.forEach((item) => {
+          const amt = Number(item.amount) || 0;
+          const dep = Math.min(amt, Number(item.deposit) || 0);
+          const bal = Math.max(0, amt - dep);
+
+          totalAmount += amt;
+          totalDeposit += dep;
+
+          if (item.balancePaid) {
+            paidAmount += amt;
+          } else {
+            paidAmount += dep;
+            remainingBalance += bal;
+
+            if (item.balanceDate && item.balanceDate.startsWith(targetYM) && bal > 0) {
+              monthDueAmount += bal;
+              monthDueCount += 1;
+            }
+          }
+
+          const payerKey = item.payer || '공동';
+          payerTotals[payerKey] = (payerTotals[payerKey] || 0) + amt;
+        });
+
+        const paidPercent = totalAmount === 0 ? 0 : Math.round((paidAmount / totalAmount) * 100);
+        summaryPercentEl.textContent = `${paidPercent}%`;
+        summaryProgressBarEl.style.width = `${paidPercent}%`;
+
+        summaryTotalEl.textContent = formatCurrency(totalAmount);
+        summaryPaidEl.textContent = formatCurrency(paidAmount);
+        summaryDepositSubEl.textContent = `계약금 합계 ${formatCurrency(totalDeposit)} 포함`;
+        summaryBalanceEl.textContent = formatCurrency(remainingBalance);
+
+        if (monthOffset === 0) {
+          summaryMonthDueLabelEl.textContent = `이번달 결제 필요액`;
+          summaryMonthDueSubEl.textContent = `이번 달 잔금 예정 ${monthDueCount}건`;
+        } else if (monthOffset > 0) {
+          summaryMonthDueLabelEl.textContent = `${targetYear}년 ${targetMonth}월 결제 필요액`;
+          summaryMonthDueSubEl.textContent = `잔금 예정 ${monthDueCount}건`;
+        } else {
+          summaryMonthDueLabelEl.textContent = `${targetYear}년 ${targetMonth}월 결제 필요액`;
+          summaryMonthDueSubEl.textContent = `지난 달 잔금 예정 ${monthDueCount}건`;
+        }
+
+        summaryMonthDueEl.textContent = formatCurrency(monthDueAmount);
+
+        // 목표 예산 대비 사용 현황 업데이트
+        if (targetBudget <= 0) {
+          budgetTrackerBox.className = 'mb-4 rounded-2xl bg-sky-50/75 border border-sky-200/80 p-4 transition-all';
+          budgetStatusBadge.className = 'text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200/80';
+          budgetStatusBadge.textContent = '예산 미설정';
+          budgetUsageTrack.className = 'w-full h-2.5 bg-white/90 rounded-full overflow-hidden border border-sky-100 mb-2';
+          budgetUsageBar.className = 'h-full bg-gradient-to-r from-sky-300 to-indigo-300 rounded-full transition-all duration-500';
+          budgetUsageBar.style.width = '0%';
+          budgetUsageDetail.textContent = '위 입력칸에 예상 예산을 입력하면 사용률과 초과 여부를 자동으로 계산해 드려요.';
+          budgetDiffDetail.className = 'font-bold text-sky-700';
+          budgetDiffDetail.textContent = totalAmount > 0 ? `현재 총 사용액 ${formatCurrency(totalAmount)}` : '';
+        } else if (totalAmount <= targetBudget) {
+          const usedPct = Math.round((totalAmount / targetBudget) * 1000) / 10;
+          const leftBudget = targetBudget - totalAmount;
+
+          budgetTrackerBox.className = 'mb-4 rounded-2xl bg-sky-50/75 border border-sky-200/80 p-4 transition-all';
+          budgetStatusBadge.className = 'text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200/80';
+          budgetStatusBadge.textContent = `예산 내 진행 (${usedPct}%)`;
+          budgetUsageTrack.className = 'w-full h-2.5 bg-white/90 rounded-full overflow-hidden border border-sky-100 mb-2';
+          budgetUsageBar.className = 'h-full bg-gradient-to-r from-sky-300 to-indigo-300 rounded-full transition-all duration-500';
+          budgetUsageBar.style.width = `${Math.min(100, usedPct)}%`;
+          budgetUsageDetail.textContent = `예산 ${formatCurrency(targetBudget)} 중 ${formatCurrency(totalAmount)} 사용 (${usedPct}%)`;
+          budgetDiffDetail.className = 'font-bold text-sky-700';
+          budgetDiffDetail.textContent = `남은 예산 ${formatCurrency(leftBudget)}`;
+        } else {
+          const overAmount = totalAmount - targetBudget;
+          const overPct = Math.round((overAmount / targetBudget) * 1000) / 10;
+
+          budgetTrackerBox.className = 'mb-4 rounded-2xl bg-rose-50/85 border border-rose-200/90 p-4 transition-all';
+          budgetStatusBadge.className = 'text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200/90';
+          budgetStatusBadge.textContent = `예산 ${overPct}% 초과`;
+          budgetUsageTrack.className = 'w-full h-2.5 bg-white/90 rounded-full overflow-hidden border border-rose-100 mb-2';
+          budgetUsageBar.className = 'h-full bg-gradient-to-r from-rose-300 to-pink-400 rounded-full transition-all duration-500';
+          budgetUsageBar.style.width = '100%';
+          budgetUsageDetail.textContent = `예산 ${formatCurrency(targetBudget)} 대비 ${formatCurrency(totalAmount)} 사용`;
+          budgetDiffDetail.className = 'font-bold text-rose-600';
+          budgetDiffDetail.textContent = `${formatCurrency(overAmount)} 초과 (${overPct}%)`;
+        }
+
+        // 결제자별 분담 현황 렌더링
+        payerSummaryBar.innerHTML = `<span class="text-slate-400 font-medium mr-1">결제자별 총액:</span>`;
+        Object.entries(payerTotals).forEach(([payerName, amt]) => {
+          const badgeStyle = PAYER_BADGE_STYLES[payerName] || 'bg-slate-50 text-slate-600 border-slate-200';
+          const badge = document.createElement('span');
+          badge.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border font-medium ${badgeStyle}`;
+          badge.innerHTML = `<span>${escapeHtml(payerName)}</span><strong class="font-bold">${formatCurrency(amt)}</strong>`;
+          payerSummaryBar.appendChild(badge);
+        });
+      }
+
+      /**
+       * 전체 목록 및 하단 합계/차트 렌더링
+       */
+      function render() {
+        // 존재하지 않는 ID 선택 상태 정리
+        const validIds = new Set(expenses.map((item) => item.id));
+        selectedIds.forEach((id) => {
+          if (!validIds.has(id)) selectedIds.delete(id);
+        });
+
+        updateSummary();
+        const filtered = getFilteredExpenses();
+        const currentYM = getCurrentYearMonth();
+
+        // 전체 선택 버튼 상태 갱신
+        if (filtered.length > 0 && filtered.every((item) => selectedIds.has(item.id))) {
+          toggleSelectAllBtn.textContent = '선택 해제';
+        } else {
+          toggleSelectAllBtn.textContent = '전체 선택';
+        }
+
+        expenseListEl.innerHTML = '';
+
+        if (filtered.length === 0) {
+          emptyStateEl.classList.remove('hidden');
+          if (expenses.length === 0) {
+            emptyTitleEl.textContent = '등록된 결혼 준비 비용 항목이 없어요';
+            emptySubtitleEl.textContent = '위 입력창에서 웨딩홀, 스드메, 신혼여행 등 첫 항목을 추가해 보세요!';
+          } else {
+            emptyTitleEl.textContent = '조건에 맞는 비용 항목이 없어요';
+            emptySubtitleEl.textContent = '상단 필터 조건을 변경해 전체 내역을 확인해 보세요.';
+          }
+        } else {
+          emptyStateEl.classList.add('hidden');
+
+          filtered.forEach((item, idx) => {
+            const amt = Number(item.amount) || 0;
+            const dep = Math.min(amt, Number(item.deposit) || 0);
+            const bal = Math.max(0, amt - dep);
+            const isSelected = selectedIds.has(item.id);
+            const isDueThisMonth = !item.balancePaid && item.balanceDate && item.balanceDate.startsWith(currentYM) && bal > 0;
+            const isFirst = idx === 0;
+            const isLast = idx === filtered.length - 1;
+
+            const li = document.createElement('li');
+            li.dataset.id = item.id;
+            li.draggable = inlineMemoEditId !== item.id;
+            li.className = `item-enter rounded-2xl border p-4 transition-all duration-200 ${
+              isSelected
+                ? 'bg-purple-50/75 border-purple-300 shadow-sm'
+                : item.balancePaid
+                ? 'bg-emerald-50/45 border-emerald-200/80 hover:bg-emerald-50/75'
+                : isDueThisMonth
+                ? 'bg-amber-50/70 border-amber-200/90 hover:bg-amber-100/50'
+                : 'bg-rose-50/40 border-rose-200/70 hover:bg-rose-50/65'
+            }`;
+
+            // 상단 행: 체크박스, 잔금 완료 토글, 카테고리/결제자/날짜 배지, 우측 이동·수정·삭제 버튼
+            const topRow = document.createElement('div');
+            topRow.className = 'flex items-center justify-between gap-2 mb-2';
+
+            const leftMeta = document.createElement('div');
+            leftMeta.className = 'flex flex-wrap items-center gap-1.5 sm:gap-2';
+
+            // 다중 선택용 체크박스
+            const selectCheck = document.createElement('input');
+            selectCheck.type = 'checkbox';
+            selectCheck.checked = isSelected;
+            selectCheck.title = '합계 계산용 항목 선택';
+            selectCheck.setAttribute('aria-label', `${item.title} 합계 선택`);
+            selectCheck.className = 'w-4 h-4 accent-purple-400 rounded cursor-pointer';
+            selectCheck.addEventListener('change', () => toggleSelectExpense(item.id));
+
+            // 잔금 지불 상태 토글 배지
+            const statusToggleBtn = document.createElement('button');
+            statusToggleBtn.type = 'button';
+            statusToggleBtn.title = item.balancePaid ? '클릭하여 잔금 미지불로 변경' : '클릭하여 잔금 지불 완료로 표시';
+            statusToggleBtn.className = `inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all ${
+              item.balancePaid
+                ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200/70'
+                : 'bg-white text-rose-600 border-rose-200 hover:bg-rose-50'
+            }`;
+            statusToggleBtn.innerHTML = item.balancePaid
+              ? `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg><span>지불 완료</span>`
+              : `<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span><span>잔금 미지불</span>`;
+            statusToggleBtn.addEventListener('click', () => toggleBalancePaid(item.id));
+
+            // 카테고리 배지
+            const catBadge = document.createElement('span');
+            catBadge.className = `text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${getCategoryBadgeClass(item.category)}`;
+            catBadge.textContent = item.category || '기타';
+
+            // 결제자 배지
+            const payerName = item.payer || '공동';
+            const payerBadge = document.createElement('span');
+            payerBadge.className = `text-[11px] font-medium px-2 py-0.5 rounded-full border ${PAYER_BADGE_STYLES[payerName] || 'bg-slate-50 text-slate-600 border-slate-200'}`;
+            payerBadge.textContent = payerName;
+
+            leftMeta.append(selectCheck, statusToggleBtn, catBadge, payerBadge);
+
+            if (item.date) {
+              const dateBadge = document.createElement('span');
+              dateBadge.className = 'text-[11px] text-slate-400 font-medium';
+              dateBadge.textContent = `계약 ${formatDateDisplay(item.date)}`;
+              leftMeta.appendChild(dateBadge);
+            }
+
+            if (isDueThisMonth) {
+              const dueBadge = document.createElement('span');
+              dueBadge.className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200';
+              dueBadge.textContent = '이번 달 결제 예정';
+              leftMeta.appendChild(dueBadge);
+            }
+
+            // 우측 액션 버튼 (위로, 아래로, 수정, 삭제)
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'flex items-center gap-0.5 shrink-0';
+
+            const upBtn = document.createElement('button');
+            upBtn.type = 'button';
+            upBtn.disabled = isFirst;
+            upBtn.title = '위로 이동';
+            upBtn.setAttribute('aria-label', '위로 이동');
+            upBtn.className = 'p-1.5 rounded-xl text-slate-400 hover:text-purple-600 hover:bg-white/80 disabled:opacity-25 disabled:pointer-events-none transition-colors';
+            upBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>`;
+            upBtn.addEventListener('click', () => moveExpense(item.id, 'up'));
+
+            const downBtn = document.createElement('button');
+            downBtn.type = 'button';
+            downBtn.disabled = isLast;
+            downBtn.title = '아래로 이동';
+            downBtn.setAttribute('aria-label', '아래로 이동');
+            downBtn.className = 'p-1.5 rounded-xl text-slate-400 hover:text-purple-600 hover:bg-white/80 disabled:opacity-25 disabled:pointer-events-none transition-colors';
+            downBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>`;
+            downBtn.addEventListener('click', () => moveExpense(item.id, 'down'));
+
+            const editBtn = document.createElement('button');
+            editBtn.type = 'button';
+            editBtn.title = '항목 수정';
+            editBtn.setAttribute('aria-label', '항목 수정');
+            editBtn.className = 'p-1.5 rounded-xl text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-colors';
+            editBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>`;
+            editBtn.addEventListener('click', () => startEditExpense(item.id));
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.title = '항목 삭제';
+            deleteBtn.setAttribute('aria-label', '항목 삭제');
+            deleteBtn.className = 'p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors';
+            deleteBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
+            deleteBtn.addEventListener('click', () => deleteExpense(item.id));
+
+            actionsDiv.append(upBtn, downBtn, editBtn, deleteBtn);
+            topRow.append(leftMeta, actionsDiv);
+
+            // 하단 행: 항목명 + 메모 영역 및 금액 상세 (총 금액, 계약금, 잔금 & 잔금 결제일)
+            const bottomRow = document.createElement('div');
+            bottomRow.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1';
+
+            const titleAndMemoDiv = document.createElement('div');
+            titleAndMemoDiv.className = 'flex-1 min-w-0 space-y-1.5';
+
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = item.title;
+            titleEl.className = `text-sm sm:text-base font-bold break-words ${
+              item.balancePaid ? 'text-slate-500' : 'text-slate-800'
+            }`;
+
+            titleAndMemoDiv.appendChild(titleEl);
+
+            // 등록된 항목 밑 작은 글씨 메모 표시 또는 인라인 메모 추가/수정 입력창
+            const memoText = (item.memo || '').trim();
+            if (inlineMemoEditId === item.id) {
+              const memoEditForm = document.createElement('div');
+              memoEditForm.className = 'flex items-center gap-1.5 pt-0.5';
+
+              const memoInputEl = document.createElement('input');
+              memoInputEl.type = 'text';
+              memoInputEl.value = memoText;
+              memoInputEl.maxLength = 150;
+              memoInputEl.placeholder = '메모를 입력하세요 (예: 계좌번호, 계약 조건, 담당자)';
+              memoInputEl.className =
+                'flex-1 min-w-0 bg-white text-slate-700 placeholder-slate-400 text-xs px-2.5 py-1.5 rounded-xl border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-100';
+
+              const saveMemoBtn = document.createElement('button');
+              saveMemoBtn.type = 'button';
+              saveMemoBtn.textContent = '저장';
+              saveMemoBtn.className =
+                'px-2.5 py-1.5 rounded-xl bg-purple-200 hover:bg-purple-300 text-purple-900 text-[11px] font-semibold shrink-0 transition-colors';
+
+              const cancelMemoBtn = document.createElement('button');
+              cancelMemoBtn.type = 'button';
+              cancelMemoBtn.textContent = '취소';
+              cancelMemoBtn.className =
+                'px-2 py-1.5 rounded-xl bg-white/90 hover:bg-slate-100 text-slate-500 border border-slate-200 text-[11px] font-medium shrink-0 transition-colors';
+
+              const commitMemo = () => saveInlineMemo(item.id, memoInputEl.value);
+              const cancelMemo = () => {
+                inlineMemoEditId = null;
+                render();
+              };
+
+              saveMemoBtn.addEventListener('click', commitMemo);
+              cancelMemoBtn.addEventListener('click', cancelMemo);
+              memoInputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  commitMemo();
+                } else if (e.key === 'Escape') {
+                  e.preventDefault();
+                  cancelMemo();
+                }
+              });
+
+              memoEditForm.append(memoInputEl, saveMemoBtn, cancelMemoBtn);
+              titleAndMemoDiv.appendChild(memoEditForm);
+
+              requestAnimationFrame(() => {
+                memoInputEl.focus();
+                memoInputEl.setSelectionRange(memoInputEl.value.length, memoInputEl.value.length);
+              });
+            } else if (memoText) {
+              const memoDisplayBtn = document.createElement('button');
+              memoDisplayBtn.type = 'button';
+              memoDisplayBtn.title = '클릭하여 메모 수정';
+              memoDisplayBtn.className =
+                'group/memo inline-flex items-start gap-1.5 text-left text-xs text-slate-500 hover:text-slate-700 bg-white/65 hover:bg-white/95 px-2.5 py-1 rounded-xl border border-slate-200/60 transition-colors max-w-full';
+              memoDisplayBtn.innerHTML = `
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover/memo:text-purple-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z" />
+                </svg>
+                <span class="break-words leading-relaxed">${escapeHtml(memoText)}</span>
+              `;
+              memoDisplayBtn.addEventListener('click', () => {
+                inlineMemoEditId = item.id;
+                render();
+              });
+              titleAndMemoDiv.appendChild(memoDisplayBtn);
+            } else {
+              const addMemoBtn = document.createElement('button');
+              addMemoBtn.type = 'button';
+              addMemoBtn.className =
+                'inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-purple-600 transition-colors';
+              addMemoBtn.innerHTML = `
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>메모 추가</span>
+              `;
+              addMemoBtn.addEventListener('click', () => {
+                inlineMemoEditId = item.id;
+                render();
+              });
+              titleAndMemoDiv.appendChild(addMemoBtn);
+            }
+
+            const financeGrid = document.createElement('div');
+            financeGrid.className = 'grid grid-cols-3 gap-2 sm:gap-4 bg-white/80 rounded-xl px-3 py-2 border border-slate-100/90 text-right shrink-0';
+            financeGrid.innerHTML = `
+              <div>
+                <div class="text-[10px] text-slate-400 font-medium">총 금액</div>
+                <div class="text-xs sm:text-sm font-bold text-slate-700">${formatCurrency(amt)}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-slate-400 font-medium">계약금</div>
+                <div class="text-xs sm:text-sm font-semibold text-emerald-700">${formatCurrency(dep)}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-slate-400 font-medium">
+                  잔금${item.balanceDate ? ` (${formatDateDisplay(item.balanceDate).slice(2)})` : ''}
+                </div>
+                <div class="text-xs sm:text-sm font-bold ${item.balancePaid ? 'text-slate-400 line-through' : 'text-rose-600'}">
+                  ${formatCurrency(bal)}
+                </div>
+              </div>
+            `;
+
+            bottomRow.append(titleAndMemoDiv, financeGrid);
+            li.append(topRow, bottomRow);
+
+            // 드래그 앤 드롭 이벤트
+            li.addEventListener('dragstart', (e) => {
+              draggedId = item.id;
+              li.classList.add('dragging');
+              e.dataTransfer.effectAllowed = 'move';
+            });
+
+            li.addEventListener('dragend', () => {
+              draggedId = null;
+              li.classList.remove('dragging');
+              document.querySelectorAll('#expense-list li').forEach((el) => el.classList.remove('drag-over'));
+            });
+
+            li.addEventListener('dragover', (e) => {
+              e.preventDefault();
+              if (draggedId && draggedId !== item.id) {
+                li.classList.add('drag-over');
+              }
+            });
+
+            li.addEventListener('dragleave', () => {
+              li.classList.remove('drag-over');
+            });
+
+            li.addEventListener('drop', (e) => {
+              e.preventDefault();
+              li.classList.remove('drag-over');
+              if (draggedId && draggedId !== item.id) {
+                reorderByDrop(draggedId, item.id);
+              }
+            });
+
+            expenseListEl.appendChild(li);
+          });
+        }
+
+        renderFooterAndChart(filtered);
+      }
+
+      /**
+       * 최하단 합계 영역(선택 합계, 목록 합계, 클릭 가능한 카테고리별 소계) 및 좌우 배치 원형 차트 렌더링
+       */
+      function renderFooterAndChart(filtered) {
+        if (expenses.length === 0) {
+          listTotalFooter.classList.add('hidden');
+          listTotalFooter.innerHTML = '';
+          return;
+        }
+
+        listTotalFooter.classList.remove('hidden');
+        listTotalFooter.innerHTML = '';
+
+        // 1. 다중 선택된 항목 합계 카드 (1개 이상 체크된 경우)
+        const selectedItems = expenses.filter((item) => selectedIds.has(item.id));
+        if (selectedItems.length > 0) {
+          const selSum = summarizeItems(selectedItems);
+          const selCard = document.createElement('div');
+          selCard.className = 'rounded-2xl bg-purple-50/90 border border-purple-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+          selCard.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-200 text-purple-900">
+                선택한 항목 합계 (${selectedItems.length}건)
+              </span>
+              <button type="button" id="clear-selection-btn" class="text-xs text-purple-600 hover:text-purple-800 underline underline-offset-2">
+                선택 해제
+              </button>
+            </div>
+            <div class="grid grid-cols-3 gap-3 sm:gap-5 text-right">
+              <div>
+                <div class="text-[10px] text-purple-500 font-medium">선택 총 금액</div>
+                <div class="text-xs sm:text-sm font-bold text-purple-950">${formatCurrency(selSum.total)}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-purple-500 font-medium">계약금 합계</div>
+                <div class="text-xs sm:text-sm font-semibold text-emerald-700">${formatCurrency(selSum.deposit)}</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-purple-500 font-medium">남은 잔금</div>
+                <div class="text-xs sm:text-sm font-bold text-rose-600">${formatCurrency(selSum.balance)}</div>
+              </div>
+            </div>
+          `;
+          listTotalFooter.appendChild(selCard);
+
+          const clearSelBtn = selCard.querySelector('#clear-selection-btn');
+          if (clearSelBtn) {
+            clearSelBtn.addEventListener('click', () => {
+              selectedIds.clear();
+              render();
+            });
+          }
+        }
+
+        // 2. 메인 하단 그리드: 좌측(합계 + 클릭 가능한 카테고리별 소계) / 우측(원형 차트 왼쪽 + 세부 비중 오른쪽)
+        const mainGrid = document.createElement('div');
+        mainGrid.className = 'grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch';
+
+        // 좌측 합계 및 카테고리 소계 카드 (5컬럼)
+        const listSum = summarizeItems(filtered);
+        const listLabel =
+          categoryFilter !== 'all'
+            ? `[${categoryFilter}] 합계 (${filtered.length}건)`
+            : `현재 목록 합계 (${filtered.length}건)`;
+
+        const leftCard = document.createElement('div');
+        leftCard.className = 'lg:col-span-5 rounded-2xl bg-rose-50/65 border border-rose-100 p-4 flex flex-col justify-between space-y-4';
+
+        const topSumHtml = `
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-rose-800">${escapeHtml(listLabel)}</span>
+              ${
+                categoryFilter !== 'all'
+                  ? `<button type="button" id="reset-cat-filter-btn" class="text-[11px] font-semibold text-rose-600 hover:text-rose-800 underline underline-offset-2">전체 보기</button>`
+                  : ''
+              }
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="bg-white/85 rounded-xl p-2.5 border border-rose-100/80">
+                <div class="text-[10px] text-slate-400 font-medium">총 금액 합계</div>
+                <div class="text-sm font-bold text-slate-800 mt-0.5">${formatCurrency(listSum.total)}</div>
+              </div>
+              <div class="bg-white/85 rounded-xl p-2.5 border border-rose-100/80">
+                <div class="text-[10px] text-slate-400 font-medium">계약금 합계</div>
+                <div class="text-sm font-semibold text-emerald-700 mt-0.5">${formatCurrency(listSum.deposit)}</div>
+              </div>
+              <div class="bg-white/85 rounded-xl p-2.5 border border-rose-100/80">
+                <div class="text-[10px] text-slate-400 font-medium">지불 완료 합계</div>
+                <div class="text-sm font-semibold text-sky-700 mt-0.5">${formatCurrency(listSum.paid)}</div>
+              </div>
+              <div class="bg-white/85 rounded-xl p-2.5 border border-rose-100/80">
+                <div class="text-[10px] text-slate-400 font-medium">남은 잔금 합계</div>
+                <div class="text-sm font-bold text-rose-600 mt-0.5">${formatCurrency(listSum.balance)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // 클릭 가능한 카테고리별 소계 영역
+        const catTotalsMap = new Map();
+        categories.forEach((cat) => catTotalsMap.set(cat, 0));
+        expenses.forEach((item) => {
+          const c = item.category || '기타';
+          catTotalsMap.set(c, (catTotalsMap.get(c) || 0) + (Number(item.amount) || 0));
+        });
+
+        const subtotalSection = document.createElement('div');
+        subtotalSection.className = 'pt-3 border-t border-rose-200/60';
+        subtotalSection.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 mb-2">카테고리별 소계 (클릭 시 차트·목록 전환)</div>`;
+
+        const subtotalChipsWrap = document.createElement('div');
+        subtotalChipsWrap.className = 'flex flex-wrap gap-1.5';
+
+        // '전체' 버튼
+        const allCatTotal = expenses.reduce((acc, cur) => acc + (Number(cur.amount) || 0), 0);
+        const allBtn = document.createElement('button');
+        allBtn.type = 'button';
+        allBtn.className = `text-[11px] px-2.5 py-1 rounded-xl border font-semibold transition-all ${
+          categoryFilter === 'all'
+            ? 'bg-slate-700 text-white border-slate-700 shadow-sm'
+            : 'bg-white/80 text-slate-600 border-slate-200 hover:bg-white'
+        }`;
+        allBtn.textContent = `전체 ${formatCurrency(allCatTotal)}`;
+        allBtn.addEventListener('click', () => {
+          categoryFilter = 'all';
+          categoryFilterSelect.value = 'all';
+          render();
+        });
+        subtotalChipsWrap.appendChild(allBtn);
+
+        catTotalsMap.forEach((catAmt, catName) => {
+          const isActive = categoryFilter === catName;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `text-[11px] px-2.5 py-1 rounded-xl border font-semibold transition-all ${
+            isActive
+              ? 'ring-2 ring-rose-300 bg-white text-slate-900 border-rose-300 shadow-sm'
+              : `${getCategoryBadgeClass(catName)} hover:opacity-90`
+          }`;
+          btn.textContent = `${catName} ${formatCurrency(catAmt)}`;
+          btn.addEventListener('click', () => {
+            categoryFilter = isActive ? 'all' : catName;
+            categoryFilterSelect.value = categoryFilter;
+            render();
+          });
+          subtotalChipsWrap.appendChild(btn);
+        });
+
+        subtotalSection.appendChild(subtotalChipsWrap);
+        leftCard.innerHTML = topSumHtml;
+        leftCard.appendChild(subtotalSection);
+
+        const resetCatBtn = leftCard.querySelector('#reset-cat-filter-btn');
+        if (resetCatBtn) {
+          resetCatBtn.addEventListener('click', () => {
+            categoryFilter = 'all';
+            categoryFilterSelect.value = 'all';
+            render();
+          });
+        }
+
+        // 3. 우측 원형 차트 카드 (7컬럼): 왼쪽 원형 차트 + 오른쪽 세부 항목 비율
+        const rightCard = document.createElement('div');
+        rightCard.className = 'lg:col-span-7 rounded-2xl bg-white/90 border border-purple-100 p-4 sm:p-5 flex flex-col justify-between';
+
+        let chartTitle = '카테고리별 금액 비율';
+        let rawSegments = [];
+
+        if (selectedItems.length > 0) {
+          chartTitle = `선택 항목 금액 비율 (${selectedItems.length}건)`;
+          rawSegments = selectedItems.map((item) => ({
+            label: item.title,
+            value: Number(item.amount) || 0,
+          }));
+        } else if (categoryFilter !== 'all') {
+          chartTitle = `[${categoryFilter}] 세부 항목 비율`;
+          rawSegments = filtered.map((item) => ({
+            label: item.title,
+            value: Number(item.amount) || 0,
+          }));
+        } else {
+          chartTitle = '카테고리별 금액 비율';
+          const grouped = new Map();
+          filtered.forEach((item) => {
+            const key = item.category || '기타';
+            grouped.set(key, (grouped.get(key) || 0) + (Number(item.amount) || 0));
+          });
+          grouped.forEach((val, key) => {
+            rawSegments.push({ label: key, value: val });
+          });
+        }
+
+        const positiveSegments = rawSegments
+          .filter((seg) => seg.value > 0)
+          .sort((a, b) => b.value - a.value);
+
+        const chartTotal = positiveSegments.reduce((sum, seg) => sum + seg.value, 0);
+
+        const headerHtml = `
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs sm:text-sm font-bold text-slate-700">${escapeHtml(chartTitle)}</span>
+            <span class="text-[11px] font-medium text-slate-400">총 ${formatCurrency(chartTotal)}</span>
+          </div>
+        `;
+
+        if (chartTotal <= 0 || positiveSegments.length === 0) {
+          rightCard.innerHTML = `
+            ${headerHtml}
+            <div class="flex-1 flex items-center justify-center py-8 text-xs text-slate-400">
+              표시할 금액 데이터가 없습니다.
+            </div>
+          `;
+        } else {
+          const size = 210;
+          const cx = size / 2;
+          const cy = size / 2;
+          const radius = 74;
+          const strokeWidth = 28;
+          const circumference = 2 * Math.PI * radius;
+
+          let accumulatedRatio = 0;
+          const circlesSvg = positiveSegments
+            .map((seg, idx) => {
+              const ratio = seg.value / chartTotal;
+              const dashLength = ratio * circumference;
+              const dashOffset = -accumulatedRatio * circumference;
+              accumulatedRatio += ratio;
+              const color = getChartColor(idx);
+
+              return `
+                <circle
+                  cx="${cx}"
+                  cy="${cy}"
+                  r="${radius}"
+                  fill="transparent"
+                  stroke="${color}"
+                  stroke-width="${strokeWidth}"
+                  stroke-dasharray="${dashLength} ${circumference}"
+                  stroke-dashoffset="${dashOffset}"
+                  class="transition-all duration-500"
+                />
+              `;
+            })
+            .join('');
+
+          const breakdownHtml = positiveSegments
+            .map((seg, idx) => {
+              const pct = Math.round((seg.value / chartTotal) * 1000) / 10;
+              const color = getChartColor(idx);
+              return `
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${color};"></span>
+                      <span class="font-semibold text-slate-700 truncate">${escapeHtml(seg.label)}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <span class="text-[11px] text-slate-500">${formatCurrency(seg.value)}</span>
+                      <span class="text-[11px] font-bold text-slate-800 w-11 text-right">${pct}%</span>
+                    </div>
+                  </div>
+                  <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-500" style="width: ${Math.min(100, pct)}%; background-color: ${color};"></div>
+                  </div>
+                </div>
+              `;
+            })
+            .join('');
+
+          rightCard.innerHTML = `
+            ${headerHtml}
+            <div class="flex flex-col sm:flex-row items-center gap-5 my-auto">
+              <!-- 왼쪽 원형 차트 -->
+              <div class="relative w-[190px] h-[190px] sm:w-[210px] sm:h-[210px] shrink-0 flex items-center justify-center">
+                <svg viewBox="0 0 ${size} ${size}" class="w-full h-full -rotate-90">
+                  <circle
+                    cx="${cx}"
+                    cy="${cy}"
+                    r="${radius}"
+                    fill="transparent"
+                    stroke="#f1f5f9"
+                    stroke-width="${strokeWidth}"
+                  />
+                  ${circlesSvg}
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-4">
+                  <span class="text-[10px] font-medium text-slate-400">합계 금액</span>
+                  <span class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5 break-all leading-tight">
+                    ${formatCurrency(chartTotal)}
+                  </span>
+                </div>
+              </div>
+
+              <!-- 오른쪽 세부 항목 비율 -->
+              <div class="flex-1 w-full space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
+                ${breakdownHtml}
+              </div>
+            </div>
+          `;
+        }
+
+        mainGrid.append(leftCard, rightCard);
+        listTotalFooter.appendChild(mainGrid);
+      }
+
+      function summarizeItems(list) {
+        let total = 0;
+        let deposit = 0;
+        let paid = 0;
+        let balance = 0;
+
+        list.forEach((item) => {
+          const amt = Number(item.amount) || 0;
+          const dep = Math.min(amt, Number(item.deposit) || 0);
+          const bal = Math.max(0, amt - dep);
+
+          total += amt;
+          deposit += dep;
+          if (item.balancePaid) {
+            paid += amt;
+          } else {
+            paid += dep;
+            balance += bal;
+          }
+        });
+
+        return { total, deposit, paid, balance };
+      }
+
+      /**
+       * 이벤트 리스너 바인딩
+       */
+      function initEvents() {
+        // 결혼 예정일 변경 이벤트
+        inputWeddingDate.addEventListener('change', (e) => {
+          weddingDate = e.target.value;
+          saveWeddingDate();
+          updateWeddingDdayDisplay();
+        });
+
+        // 월별 결제 필요액 이전/다음 달 넘기기 버튼 (◀, ▶)
+        prevMonthDueBtn.addEventListener('click', () => {
+          monthOffset -= 1;
+          updateSummary();
+        });
+
+        nextMonthDueBtn.addEventListener('click', () => {
+          monthOffset += 1;
+          updateSummary();
+        });
+
+        // 목표 예산 입력 (천 단위 콤마 자동 포맷 및 저장)
+        inputTargetBudget.addEventListener('input', (e) => {
+          const numericVal = parseCurrencyInput(e.target.value);
+          targetBudget = numericVal;
+          e.target.value = numericVal > 0 ? numericVal.toLocaleString('ko-KR') : '';
+          saveTargetBudget();
+          updateSummary();
+        });
+
+        // 금액 / 계약금 입력 천 단위 콤마 자동 포맷
+        document.querySelectorAll('.currency-input').forEach((inputEl) => {
+          inputEl.addEventListener('input', (e) => {
+            const numericVal = parseCurrencyInput(e.target.value);
+            e.target.value = numericVal > 0 ? numericVal.toLocaleString('ko-KR') : '';
+          });
+        });
+
+        // 카테고리 관리 패널 열기/닫기
+        toggleCategoryManagerBtn.addEventListener('click', () => {
+          categoryManagerPanel.classList.toggle('hidden');
+          if (!categoryManagerPanel.classList.contains('hidden')) {
+            newCategoryInput.focus();
+          }
+        });
+
+        quickManageCatBtn.addEventListener('click', () => {
+          categoryManagerPanel.classList.remove('hidden');
+          newCategoryInput.focus();
+        });
+
+        closeCategoryManagerBtn.addEventListener('click', () => {
+          categoryManagerPanel.classList.add('hidden');
+        });
+
+        addCategoryBtn.addEventListener('click', addCategory);
+        newCategoryInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addCategory();
+          }
+        });
+
+        // 비용 항목 폼 제출 & 수정 취소
+        expenseForm.addEventListener('submit', handleFormSubmit);
+        cancelEditBtn.addEventListener('click', () => {
+          resetForm();
+          showToast('수정이 취소되었습니다.');
+        });
+
+        // 상태 필터 탭 전환
+        statusFilterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            statusFilter = btn.dataset.statusFilter;
+            statusFilterBtns.forEach((b) => {
+              b.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+              b.classList.add('text-slate-500');
+            });
+            btn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+            btn.classList.remove('text-slate-500');
+            render();
+          });
+        });
+
+        // 카테고리 & 결제자 필터
+        categoryFilterSelect.addEventListener('change', (e) => {
+          categoryFilter = e.target.value;
+          render();
+        });
+
+        payerFilterSelect.addEventListener('change', (e) => {
+          payerFilter = e.target.value;
+          render();
+        });
+
+        // 전체 선택 / 해제
+        toggleSelectAllBtn.addEventListener('click', toggleSelectAllVisible);
+
+        // 토스트 실행 취소
+        toastUndoBtn.addEventListener('click', undoDelete);
+      }
+
+      // 초기 실행
+      loadWeddingDate();
+      loadCategories();
+      loadExpenses();
+      loadTargetBudget();
+      renderCategoryControls();
+      resetForm();
+      initEvents();
+      render();
+    })();
+  </script>
+</body>
+</html>
